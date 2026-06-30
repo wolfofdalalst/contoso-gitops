@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: quality-inspection
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ayushtestacr.azurecr.io/helm/webfrontend
+    chart: webfrontend
+    targetRevision: 0.1.0
+    helm:
+      releaseName: ea70b8e1085afce53d44ed7cea5c470ab417b311
+      values: |
+          Name: quality-inspection
+          batchSize: 800
+          temperature: 55
+          defectThreshold: 1.0
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
